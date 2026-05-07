@@ -1,0 +1,30 @@
+body{
+    background-color:#1a1008;
+    font-family:'Cinzel',serif;
+    max-width:80%;
+    margin:0 auto;
+    padding: 5%
+}
+h1{
+    color:#F0A500
+}
+h2{
+    color:#C47F00
+}
+.description{
+    color:#E8D5B0;
+    font-size:18px
+}
+img{
+    max-width:50%;
+}
+.contenu{
+    display:flex;
+    gap:10px;
+    align-items:center
+}
+.text{
+    flex:1;
+    gap:5px;
+    align-items:baseline
+}
