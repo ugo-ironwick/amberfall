@@ -16,12 +16,18 @@ h2{
     font-size:18px
 }
 img{
-    max-width:50%;
+    max-width:75%;
 }
 .contenu{
-    display:flex;
+    display:grid;
+    grid-template-columns: 1fr;
     gap:10px;
     align-items:center
+}
+@media (min-width: 768px) {
+    .contenu{
+        grid-template-columns: 1fr 1fr;
+    }
 }
 .text{
     flex:1;
