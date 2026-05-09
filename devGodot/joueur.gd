@@ -1,10 +1,16 @@
 extends CharacterBody3D
 
+var points_de_vie = 120
+var ambre = 247
+var lueurs = 8
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-
+func _ready():
+	var label = $"../HUD/Stat"
+	label.text = "vie: " + str(points_de_vie)
+	
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
