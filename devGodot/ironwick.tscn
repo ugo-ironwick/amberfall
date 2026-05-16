@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://h0qangnspyff"]
 
 [ext_resource type="Script" uid="uid://bokagn26sreub" path="res://joueur.gd" id="1_kpnip"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1gy4"]
-albedo_color = Color(0.23921569, 0.16862746, 0.101960786, 1)
+[ext_resource type="Script" uid="uid://dypftvo51hsgr" path="res://stat.gd" id="2_lvk76"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvk76"]
 albedo_color = Color(0.54509807, 0.4117647, 0.078431375, 1)
@@ -17,12 +15,19 @@ albedo_color = Color(0.9411765, 0.65882355, 0.1882353, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hje4k"]
 size = Vector3(1, 2, 1)
 
-[node name="Ironwick" type="Node3D" unique_id=539679746]
+[sub_resource type="NavigationMesh" id="NavigationMesh_lvk76"]
+vertices = PackedVector3Array(-9.5, 1, -9.5, -9.5, 1, 9.5, 9.5, 1, 9.5, 9.5, 1, -9.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+geometry_parsed_geometry_type = 1
+agent_height = 2.0
 
-[node name="Sol" type="CSGBox3D" parent="." unique_id=608052063]
-use_collision = true
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1gy4"]
+albedo_color = Color(0.23921569, 0.16862746, 0.101960786, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lvk76"]
 size = Vector3(20, 1, 20)
-material = SubResource("StandardMaterial3D_l1gy4")
+
+[node name="Ironwick" type="Node3D" unique_id=539679746]
 
 [node name="Camera" type="Camera3D" parent="." unique_id=824583233]
 transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 10, 15, 10)
@@ -58,15 +63,36 @@ material = SubResource("StandardMaterial3D_5ttmo")
 [node name="Collision" type="CollisionShape3D" parent="Joueur" unique_id=74446479]
 shape = SubResource("BoxShape3D_hje4k")
 
+[node name="Navigation" type="NavigationAgent3D" parent="Joueur" unique_id=1352463375]
+
 [node name="Light" type="DirectionalLight3D" parent="." unique_id=1461919008]
 transform = Transform3D(0.72657466, -0.2882003, 0.62372255, 0, 0.9077775, 0.4194521, -0.6870875, -0.30476326, 0.65956813, 30.242767, 33.96875, 33.551147)
 shadow_enabled = true
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=2001131028]
 
-[node name="Stat" type="Label" parent="HUD" unique_id=1619549564]
+[node name="Stats" type="Label" parent="HUD" unique_id=1619549564]
 custom_minimum_size = Vector2(300, 100)
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 33.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+offset_right = 300.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Texte par défaut"
+vertical_alignment = 1
+script = ExtResource("2_lvk76")
+
+[node name="NavigationSol" type="NavigationRegion3D" parent="." unique_id=1011721387]
+navigation_mesh = SubResource("NavigationMesh_lvk76")
+
+[node name="Sol" type="CSGBox3D" parent="NavigationSol" unique_id=608052063]
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_l1gy4")
+
+[node name="SolPhysique" type="StaticBody3D" parent="NavigationSol/Sol" unique_id=61450919]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationSol/Sol/SolPhysique" unique_id=1521974957]
+shape = SubResource("BoxShape3D_lvk76")

@@ -1,34 +1,52 @@
 extends CharacterBody3D
+# dire à godot que ce script est pour un CharacterBody3D
 
-var points_de_vie = 120
-var ambre = 247
-var lueurs = 8
+# - Variables (peut les call dans des fonctions) -
+var points_de_vie = 100 # vie
+var ambre = 247 # Monaie
+var lueurs = 8 # Énergie
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+# variables de déplacement
+var destination = Vector3.ZERO
+var nav_agent
 
+# - Constentes (ne changent jamais) -
+const SPEED = 5.2
+
+# - S'exécute UNE FOIS au démarage -
 func _ready():
-	var label = $"../HUD/Stat"
-	label.text = "vie: " + str(points_de_vie)
+	#Position de départ du déplacement
+	nav_agent = $Navigation
+	# affichage de la vie
+	var label = $"../HUD/Stats"
+	label.text = str(ambre) + " 🔅"
 	
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("Clic détecté à la position: " + str(event.position))
+			if not get_viewport().is_input_handled():
+				deplacer_vers_clic(event.position)
+		deplacer_vers_clic(event.position)
+	
+func deplacer_vers_clic(position_ecran: Vector2):
+	var camera = $'../Camera'
+	var origine = camera.project_ray_origin(position_ecran)
+	var direction_ray = camera.project_ray_normal(position_ecran)
+	var plan_sol = Plane(Vector3.UP, 0)
+	var point_sol = plan_sol.intersects_ray(origine, direction_ray)
+	
+	print("Point sol: " + str(point_sol))
+	
+	if point_sol:
+		nav_agent.set_target_position(point_sol)
+	
+func _physics_process(_delta):
+	if nav_agent.is_navigation_finished():
+		return # Arrivé à destination, on s'arrête
+	
+	var prochaine_pos = nav_agent.get_next_path_position()
+	var direction = (prochaine_pos - global_position).normalized()
 
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+	velocity = direction * SPEED
 	move_and_slide()
