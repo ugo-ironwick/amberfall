@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bokagn26sreub" path="res://joueur.gd" id="1_kpnip"]
 [ext_resource type="Script" uid="uid://dypftvo51hsgr" path="res://stat.gd" id="2_lvk76"]
+[ext_resource type="Script" uid="uid://cwbfcyi4ri4nm" path="res://camera.gd" id="2_tr36i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvk76"]
 albedo_color = Color(0.54509807, 0.4117647, 0.078431375, 1)
@@ -29,12 +30,6 @@ size = Vector3(20, 1, 20)
 
 [node name="Ironwick" type="Node3D" unique_id=539679746]
 
-[node name="Camera" type="Camera3D" parent="." unique_id=824583233]
-transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 10, 15, 10)
-projection = 1
-current = true
-size = 25.0
-
 [node name="Maison-1" type="CSGBox3D" parent="." unique_id=1573587390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 use_collision = true
@@ -55,6 +50,13 @@ material = SubResource("StandardMaterial3D_tr36i")
 [node name="Joueur" type="CharacterBody3D" parent="." unique_id=1920080498]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
 script = ExtResource("1_kpnip")
+
+[node name="Camera" type="Camera3D" parent="Joueur" unique_id=824583233]
+transform = Transform3D(0.7071068, -0.5, 0.5, 0, 0.7071068, 0.70710677, -0.7071068, -0.5, 0.5, 10, 13, 5)
+projection = 1
+current = true
+size = 25.0
+script = ExtResource("2_tr36i")
 
 [node name="Modele" type="CSGBox3D" parent="Joueur" unique_id=1394191449]
 size = Vector3(1, 2, 1)

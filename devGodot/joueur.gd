@@ -24,19 +24,16 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print("Clic détecté à la position: " + str(event.position))
 			if not get_viewport().is_input_handled():
 				deplacer_vers_clic(event.position)
 		deplacer_vers_clic(event.position)
 	
 func deplacer_vers_clic(position_ecran: Vector2):
-	var camera = $'../Camera'
+	var camera = $'Camera'
 	var origine = camera.project_ray_origin(position_ecran)
 	var direction_ray = camera.project_ray_normal(position_ecran)
 	var plan_sol = Plane(Vector3.UP, 0)
 	var point_sol = plan_sol.intersects_ray(origine, direction_ray)
-	
-	print("Point sol: " + str(point_sol))
 	
 	if point_sol:
 		nav_agent.set_target_position(point_sol)
@@ -47,6 +44,7 @@ func _physics_process(_delta):
 	
 	var prochaine_pos = nav_agent.get_next_path_position()
 	var direction = (prochaine_pos - global_position).normalized()
+	
 
 	velocity = direction * SPEED
 	move_and_slide()
